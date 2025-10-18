@@ -12,3 +12,23 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Message {
+  id        String   @id @default(uuid())
+  message   String
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime
+}
+
+model User {
+  id                  String    @id @default(uuid())
+  username            String    @unique
+  email               String    @unique
+  password            String
+  verifyCode          String
+  verifycodeExpiry    String
+  isVerified          Boolean   @default(false)
+  isAcceptingMessages Boolean   @default(true)
+  message             Message[]
+}
